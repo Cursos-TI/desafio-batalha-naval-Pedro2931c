@@ -1,40 +1,107 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-// Desafio Batalha Naval - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
-// Siga os comentários para implementar cada parte do desafio.
+#define TAM_NOVATO 5
+#define TAM_AVENTUREIRO 10
+#define TAM_HABILIDADE 5
+#define NAVIO 3
+
+void imprimirMatriz(int linhas, int colunas, int matriz[linhas][colunas]) {
+    for (int i = 0; i < linhas; i++) {
+        for (int j = 0; j < colunas; j++) {
+            printf("%d ", matriz[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void inicializarMatriz(int linhas, int colunas, int matriz[linhas][colunas], int valor) {
+    for (int i = 0; i < linhas; i++)
+        for (int j = 0; j < colunas; j++)
+            matriz[i][j] = valor;
+}
 
 int main() {
-    // Nível Novato - Posicionamento dos Navios
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
+    // Nível Novato
+    int tabuleiroNovato[TAM_NOVATO][TAM_NOVATO];
+    inicializarMatriz(TAM_NOVATO, TAM_NOVATO, tabuleiroNovato, 0);
 
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
+    for (int j = 0; j < 3; j++) {
+        tabuleiroNovato[1][j] = NAVIO;
+        printf("Navio Horizontal - Coordenada: (%d, %d)\n", 1, j);
+    }
 
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
+    for (int i = 2; i < 5; i++) {
+        tabuleiroNovato[i][3] = NAVIO;
+        printf("Navio Vertical - Coordenada: (%d, %d)\n", i, 3);
+    }
 
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
-    
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
+    printf("\nTabuleiro Novato (5x5):\n");
+    imprimirMatriz(TAM_NOVATO, TAM_NOVATO, tabuleiroNovato);
 
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
+
+    // Nível Aventureiro
+    int tabuleiroAventureiro[TAM_AVENTUREIRO][TAM_AVENTUREIRO];
+    inicializarMatriz(TAM_AVENTUREIRO, TAM_AVENTUREIRO, tabuleiroAventureiro, 0);
+
+    for (int j = 1; j <= 3; j++) {
+        tabuleiroAventureiro[0][j] = NAVIO;
+    }
+
+    for (int i = 5; i <= 7; i++) {
+        tabuleiroAventureiro[i][6] = NAVIO;
+    }
+
+    for (int i = 2; i < 5; i++) {
+        tabuleiroAventureiro[i][i] = NAVIO;
+    }
+
+    for (int i = 7, j = 2; i <= 9 && j <= 4; i++, j++) {
+        tabuleiroAventureiro[i][TAM_AVENTUREIRO - j - 1] = NAVIO;
+    }
+
+    printf("\nTabuleiro Aventureiro (10x10):\n");
+    imprimirMatriz(TAM_AVENTUREIRO, TAM_AVENTUREIRO, tabuleiroAventureiro);
+
+
+    // Nível Mestre
+    int cone[TAM_HABILIDADE][TAM_HABILIDADE], cruz[TAM_HABILIDADE][TAM_HABILIDADE], octaedro[TAM_HABILIDADE][TAM_HABILIDADE];
+    inicializarMatriz(TAM_HABILIDADE, TAM_HABILIDADE, cone, 0);
+    inicializarMatriz(TAM_HABILIDADE, TAM_HABILIDADE, cruz, 0);
+    inicializarMatriz(TAM_HABILIDADE, TAM_HABILIDADE, octaedro, 0);
+
+    for (int i = 0; i < TAM_HABILIDADE; i++) {
+        for (int j = 0; j < TAM_HABILIDADE; j++) {
+            if (i + j >= 2 && j - i <= 2 && i - j <= 2 && i <= 2) {
+                cone[i][j] = 1;
+            }
+        }
+    }
+
+    for (int i = 0; i < TAM_HABILIDADE; i++) {
+        for (int j = 0; j < TAM_HABILIDADE; j++) {
+            if (i == 2 || j == 2) {
+                cruz[i][j] = 1;
+            }
+        }
+    }
+
+    for (int i = 0; i < TAM_HABILIDADE; i++) {
+        for (int j = 0; j < TAM_HABILIDADE; j++) {
+            if (abs(i - 2) + abs(j - 2) <= 2) {
+                octaedro[i][j] = 1;
+            }
+        }
+    }
+
+    printf("\nHabilidade: Cone\n");
+    imprimirMatriz(TAM_HABILIDADE, TAM_HABILIDADE, cone);
+
+    printf("\nHabilidade: Cruz\n");
+    imprimirMatriz(TAM_HABILIDADE, TAM_HABILIDADE, cruz);
+
+    printf("\nHabilidade: Octaedro\n");
+    imprimirMatriz(TAM_HABILIDADE, TAM_HABILIDADE, octaedro);
 
     return 0;
 }
